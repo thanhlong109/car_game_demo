@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .game_view{
+            background-image: url("streest.png");
+            background-size:90%;
+            width: 500px; height:520px;
+        }
+        .center{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="center">
+        <div id="game" class="game_view" >
+            <img src="Car_Green_Front.png" id="car1" style="position:relative;top:0px;left:0px;width: 30px;">
+            <img src="Car_Red_Front.png" id="car2" style="position:relative;top:0px;left:0px;width: 30px;">
+            <img src="top-down-bike-racing-monsterbraingames.png" id="player1" style="position:relative;top:0px;left:0px;width: 30px;">
+        </div>
+    </div>
+    <script>
+        const max_x_car_run = 250;
+        const min_x_car_run = 170;
+        const max_y_car_run = 500;
+        class Car{
+            id;
+            speed;
+            direction;
+            y=0;
+            x;
+            constructor(i,s,d,xx){
+                this.id=i;
+                this.speed=s;
+                this.direction=d;
+                this.x = xx;
+            }
+            move(){
+                let seft = this;
+                if(this.direction==="down"){
+                    this.y=0;
+                    document.getElementById(this.id).style["left"]=this.x + "px";
+                    console.log("x: "+this.x);
+                    this.display("block");
+                    setInterval(function(){
+                        if((seft.y+seft.speed)<max_y_car_run){
+                            seft.y += seft.speed;
+                            document.getElementById(seft.id).style["top"]=seft.y + "px";
+                        }else {
+                            seft.display("none");
+                        }
+                    },10);  
+                }else if(this.direction==="up"){
+                    this.y=max_y_car_run;
+                    document.getElementById(this.id).style["left"]=this.x + "px";
+                    this.display("block");
+                    setInterval(function(){
+                        if((seft.y-seft.speed)>0){
+                            seft.y-=seft.speed;
+                            document.getElementById(seft.id).style["top"]=seft.y +"px";
+                        }else {
+                            seft.display("none");
+
+                        }
+                    })
+                }
+            }
+            display(display_status){
+                document.getElementById(this.id).style.display=display_status;
+            }
+        }
+        // 170px <= x_car_run <= 260px
+        class Player{
+            id="player1";
+            y=max_y_car_run-50;
+            x=230;
+            /*constructor(s){
+                this.speed=s;
+            }*/
+            update(){
+                let seft = this;
+                setInterval(function(){
+                    document.getElementById(seft.id).style["left"]=seft.x+"px";
+                    document.getElementById(seft.id).style["top"]=seft.y+"px";
+                },15); 
+            }
+        }
+        let store_id=["car1","car2","car3","car4","car5","car6","car7","car8"];
+        let store_speed=[0.3,0.5,0.6,0.7,0.8,0.9,1,1.1];
+        let store_direction=["up","doun","down","up","down","down","up","down","down","down"];
+        class RandomCar{
+            x;
+            id;
+            speed;
+            direction;
+            random(){
+                this.x = (Math.floor(Math.random()*(max_x_car_run-min_x_car_run))+min_x_car_run);
+                console.log(this.x);
+                this.id = store_id[Math.floor(Math.random()*2)];
+                this.speed = store_speed[Math.floor(Math.random()*9)]
+                this.direction = store_direction[Math.floor(Math.random()*11)];
+            }
+        }
+        let random_car = new RandomCar();
+        random_car.random();
+        console.log("id="+random_car.id+"speed="+random_car.speed+"direction="+random_car.direction+"x="+random_car.x);
+        let car2 = new Car(random_car.id, random_car.speed, random_car.direction,random_car.x);//red car
+        car2.move();
+        let car1= new Car("car1",1,"down",250);//green car
+        car1.move();
+        let player1 = new Player();
+        player1.update();
+        window.addEventListener("keydown", function(event){
+            let keyCode = event.keyCode;
+            if(keyCode===37&&player1.x-1>min_x_car_run){//left
+                player1.x-=3;
+                console.log("dang ấn trái");
+            }else if(keyCode===39&&player1.x+1<max_x_car_run){//right
+                player1.x+=3;
+            }else if(keyCode===38&&player1.y-1>0){//up
+                player1.y-=3;
+            }else if(keyCode===40&&player1.y+1<max_y_car_run){//down
+                player1.y+=3;
+            }
+        })
+       class Game{
+            start(){
+                
+            }
+            pause(){
+
+            }
+            continue(){
+
+            }
+            end(){
+
+            }
+       }
+    </script>
+</body>
+</html>
